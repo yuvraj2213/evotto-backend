@@ -13,11 +13,14 @@ const errorMiddleware = require("./middlewares/error-mw");
 dotenv.config();
 const app = express();
 
-const corsOptions={
-  origin:"http://evotto.vercel.app",
-  methods:"GET,POST,PUT,PATCH,DELETE",
-  credentials:true
-}
+const corsOptions = {
+  origin: [
+    'https://evotto.vercel.app', // Add the correct frontend origin
+    'http://localhost:5173', // Optional: For local development
+  ],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Allow cookies if needed
+};
 
 app.use(cors(corsOptions))
 
