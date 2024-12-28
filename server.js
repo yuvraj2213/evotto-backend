@@ -17,8 +17,9 @@ const app = express();
 
 const corsOptions = {
   origin: [
-    'https://evotto.vercel.app', // Add the correct frontend origin
-    'http://localhost:5173', // Optional: For local development
+    // 'https://evotto.vercel.app', 
+    // 'http://localhost:5173', 
+    'https://evotto.onrender.com/'
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow cookies if needed
