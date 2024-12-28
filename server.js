@@ -17,8 +17,6 @@ const app = express();
 
 const corsOptions = {
   origin: [
-    // 'https://evotto.in'
-    // 'http://localhost:5173', 
     'https://evotto-nfh4.onrender.com',
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
