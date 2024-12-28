@@ -19,7 +19,7 @@ const corsOptions = {
   origin: [
     // 'https://evotto.vercel.app', 
     // 'http://localhost:5173', 
-    'https://evotto.onrender.com/'
+    'https://evotto-nfh4.onrender.com'
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow cookies if needed
