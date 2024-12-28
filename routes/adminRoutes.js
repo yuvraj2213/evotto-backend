@@ -1,7 +1,65 @@
-const express=require('express');
-const userDetails = require('../controllers/adminController');
-const router=express.Router();
+const express = require("express");
+const path = require("path");
+const multer = require("multer");
+const {
+  userDetails,
+  userFeedbacks,
+  deleteUser,
+  getUserById,
+  updateUser,
+  adminFeedbacks,
+  adminFeedbacksDelete,
+  showSlideshow,
+  deleteSlideshow,
+  uploadSlideshowImage,
+  rentalVehicle
+} = require("../controllers/adminController");
+const authMiddleware = require("../middlewares/auth-middleware");
+const adminMiddleware = require("../middlewares/admin-middleware");
 
-router.get('/users',userDetails)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../../frontend/public/images/slideshow")); // Update path as needed
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 
-module.exports=router;
+const upload = multer({ storage });
+
+const router = express.Router();
+
+router.get("/users", authMiddleware, adminMiddleware, userDetails);
+router.get("/feedbacks", authMiddleware, userFeedbacks);
+
+router.delete("/users/delete/:id", authMiddleware, adminMiddleware, deleteUser);
+router.get("/users/:id", authMiddleware, adminMiddleware, getUserById);
+router.patch("/users/update/:id", authMiddleware, adminMiddleware, updateUser);
+
+router.get("/feedbacks", authMiddleware, adminMiddleware, adminFeedbacks);
+router.delete(
+  "/feedbacks/delete/:id",
+  authMiddleware,
+  adminMiddleware,
+  adminFeedbacksDelete
+);
+
+router.get("/slideshow", authMiddleware, adminMiddleware, showSlideshow);
+router.delete(
+  "/slideshow/delete/:id",
+  authMiddleware,
+  adminMiddleware,
+  deleteSlideshow
+);
+router.post(
+  "/slideshow/upload",
+  authMiddleware,
+  adminMiddleware,
+  upload.single("image"),
+  uploadSlideshowImage
+);
+
+router.get('/rentalVehicle',authMiddleware,adminMiddleware,rentalVehicle)
+
+module.exports = router;

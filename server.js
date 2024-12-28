@@ -8,7 +8,9 @@ const adminRoute = require("./routes/adminRoutes");
 const feedbackRoute = require("./routes/feedbackRoutes");
 const rentalVehicleRoute=require("./routes/rentalVehicleRoutes")
 const secondHandCarRoute=require("./routes/secondHandCarRoutes")
+const slideshowRoute=require("./routes/slideshowRoutes")
 const errorMiddleware = require("./middlewares/error-mw");
+const vehicleRoute = require("./routes/vehicleRoutes");
 
 dotenv.config();
 const app = express();
@@ -32,6 +34,8 @@ app.use("/api/auth", authRoute);
 app.use("/api/form/", feedbackRoute);
 app.use("/api/data/",rentalVehicleRoute)
 app.use("/api/data/",secondHandCarRoute)
+app.use("/api/data/",slideshowRoute)
+app.use("/api/data/",vehicleRoute)
 
 // Admin Routes
 app.use("/api/admin",adminRoute);
