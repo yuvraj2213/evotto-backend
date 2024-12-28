@@ -17,7 +17,8 @@ const app = express();
 
 const corsOptions = {
   origin: [
-    'https://evotto-nfh4.onrender.com',
+    'https://evotto.in'
+    // 'https://evotto-nfh4.onrender.com',
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow cookies if needed
