@@ -15,10 +15,10 @@ const vehicleRoute = require("./routes/vehicleRoutes");
 dotenv.config();
 const app = express();
 
-// Updated CORS options
 const corsOptions = {
   origin: [
-    'https://www.evotto.in'  // Corrected CORS origin
+    // 'http://localhost:5173',
+    'https://evotto-nfh4.onrender.com'
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow cookies if needed
