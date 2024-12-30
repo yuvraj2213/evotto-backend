@@ -1,7 +1,8 @@
 const User = require("../models/user-model");
 const Feedback = require("../models/feedback-model");
 const Slideshow = require("../models/slideshow-model");
-const RentalVehicle=require("../models/vehicleCards-model")
+const RentalVehicle = require("../models/vehicleCards-model");
+const RentalLocation = require("../models/location-model.js");
 
 const userDetails = async (req, res) => {
   try {
@@ -140,17 +141,51 @@ const uploadSlideshowImage = async (req, res) => {
   }
 };
 
-const rentalVehicle=async(req,res)=>{
-  try{
-    const response=await RentalVehicle.find()
+const rentalVehicle = async (req, res) => {
+  try {
+    const response = await RentalVehicle.find();
 
-    return res.status(200).json(response)
-
-
-  }catch(e){
-    console.log(e)
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
   }
-}
+};
+
+const rentalLocation = async (req, res) => {
+  try {
+    const response = await RentalLocation.find();
+
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const addRentalLocation = async (req, res) => {
+  try {
+    const { name, mapLink } = req.body;
+
+    if (!name || !mapLink) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Name and mapLink are required" });
+    }
+
+    const newLocation = new RentalLocation({ name, mapLink });
+    await newLocation.save();
+
+    return res
+      .status(201)
+      .json({
+        success: true,
+        message: "Location added successfully",
+        location: newLocation,
+      });
+  } catch (error) {
+    console.error("Error adding location:", error);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
 
 module.exports = {
   userDetails,
@@ -163,5 +198,7 @@ module.exports = {
   showSlideshow,
   deleteSlideshow,
   uploadSlideshowImage,
-  rentalVehicle
+  rentalVehicle,
+  rentalLocation,
+  addRentalLocation,
 };

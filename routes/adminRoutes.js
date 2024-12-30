@@ -12,7 +12,9 @@ const {
   showSlideshow,
   deleteSlideshow,
   uploadSlideshowImage,
-  rentalVehicle
+  rentalVehicle,
+  rentalLocation,
+  addRentalLocation
 } = require("../controllers/adminController");
 const authMiddleware = require("../middlewares/auth-middleware");
 const adminMiddleware = require("../middlewares/admin-middleware");
@@ -61,5 +63,9 @@ router.post(
 );
 
 router.get('/rentalVehicle',authMiddleware,adminMiddleware,rentalVehicle)
+
+
+router.get('/rentalLocation',authMiddleware,adminMiddleware,rentalLocation)
+router.post('/addRentalLocation',authMiddleware,adminMiddleware,addRentalLocation)
 
 module.exports = router;
