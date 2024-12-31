@@ -174,16 +174,25 @@ const addRentalLocation = async (req, res) => {
     const newLocation = new RentalLocation({ name, mapLink });
     await newLocation.save();
 
-    return res
-      .status(201)
-      .json({
-        success: true,
-        message: "Location added successfully",
-        location: newLocation,
-      });
+    return res.status(201).json({
+      success: true,
+      message: "Location added successfully",
+      location: newLocation,
+    });
   } catch (error) {
     console.error("Error adding location:", error);
     return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+const deleteRentalLocation = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await RentalLocation.deleteOne({ _id: id });
+
+    return res.status(200).json({ msg: "Location deleted successfully" });
+  } catch (e) {
+    console.log(e);
   }
 };
 
@@ -201,4 +210,5 @@ module.exports = {
   rentalVehicle,
   rentalLocation,
   addRentalLocation,
+  deleteRentalLocation
 };

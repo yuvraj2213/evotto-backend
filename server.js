@@ -11,6 +11,7 @@ const secondHandCarRoute = require("./routes/secondHandCarRoutes");
 const slideshowRoute = require("./routes/slideshowRoutes");
 const errorMiddleware = require("./middlewares/error-mw");
 const vehicleRoute = require("./routes/vehicleRoutes");
+const rentalLocationRoute = require("./routes/rentalLocationRoutes");
 
 dotenv.config();
 const app = express();
@@ -35,6 +36,7 @@ app.use("/api/data/", rentalVehicleRoute);
 app.use("/api/data/", secondHandCarRoute);
 app.use("/api/data/", slideshowRoute);
 app.use("/api/data/", vehicleRoute);
+app.use("/api/data/", rentalLocationRoute);
 
 // Admin Routes
 app.use("/api/admin", adminRoute);

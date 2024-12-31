@@ -14,7 +14,8 @@ const {
   uploadSlideshowImage,
   rentalVehicle,
   rentalLocation,
-  addRentalLocation
+  addRentalLocation,
+  deleteRentalLocation
 } = require("../controllers/adminController");
 const authMiddleware = require("../middlewares/auth-middleware");
 const adminMiddleware = require("../middlewares/admin-middleware");
@@ -67,5 +68,6 @@ router.get('/rentalVehicle',authMiddleware,adminMiddleware,rentalVehicle)
 
 router.get('/rentalLocation',authMiddleware,adminMiddleware,rentalLocation)
 router.post('/addRentalLocation',authMiddleware,adminMiddleware,addRentalLocation)
+router.delete('/rentalLocation/delete/:id',authMiddleware,adminMiddleware,deleteRentalLocation)
 
 module.exports = router;
