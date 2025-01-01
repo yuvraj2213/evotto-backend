@@ -196,6 +196,15 @@ const deleteRentalLocation = async (req, res) => {
   }
 };
 
+const userCount = async (req, res) => {
+  try {
+    const count = await User.countDocuments();
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching user count" });
+  }
+};
+
 module.exports = {
   userDetails,
   userFeedbacks,
@@ -210,5 +219,6 @@ module.exports = {
   rentalVehicle,
   rentalLocation,
   addRentalLocation,
-  deleteRentalLocation
+  deleteRentalLocation,
+  userCount
 };
