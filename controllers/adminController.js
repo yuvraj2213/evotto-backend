@@ -205,6 +205,17 @@ const userCount = async (req, res) => {
   }
 };
 
+const feedbackCount = async (req, res) => {
+  try {
+    const count = await Feedback.countDocuments();
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching user count" });
+  }
+};
+
+
+
 module.exports = {
   userDetails,
   userFeedbacks,
@@ -220,5 +231,6 @@ module.exports = {
   rentalLocation,
   addRentalLocation,
   deleteRentalLocation,
-  userCount
+  userCount,
+  feedbackCount
 };

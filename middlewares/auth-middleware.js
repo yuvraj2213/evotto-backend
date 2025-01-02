@@ -19,7 +19,6 @@ const authMiddleware = async (req, res, next) => {
     try {
         // Verify the token
         const isVerified = jwt.verify(jwtToken, process.env.JWT_SECRET_KEY);
-        console.log("Token verified:", isVerified);
 
         // Fetch user data from the database, excluding the password
         const userData = await User.findOne({ email: isVerified.email }).select('-password');

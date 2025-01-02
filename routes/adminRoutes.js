@@ -16,7 +16,8 @@ const {
   rentalLocation,
   addRentalLocation,
   deleteRentalLocation,
-  userCount
+  userCount,
+  feedbackCount
 } = require("../controllers/adminController");
 const authMiddleware = require("../middlewares/auth-middleware");
 const adminMiddleware = require("../middlewares/admin-middleware");
@@ -75,6 +76,7 @@ router.delete('/rentalLocation/delete/:id',authMiddleware,adminMiddleware,delete
 
 
 router.get("/usersCount", authMiddleware, adminMiddleware, userCount);
+router.get("/feedbacksCount", authMiddleware, adminMiddleware,feedbackCount);
 
 
 module.exports = router;
