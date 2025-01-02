@@ -9,7 +9,7 @@ const vehicleCardSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  price: {
+  weekdayPrice: {
     type: String,
     require: true,
   },
@@ -17,6 +17,10 @@ const vehicleCardSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  isAvailable:{
+    type:Boolean,
+    require:true,
+  }
 });
 
 const RentalVehicleCard = new mongoose.model("rentalvehicle", vehicleCardSchema);

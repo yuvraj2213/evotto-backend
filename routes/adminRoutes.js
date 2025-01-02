@@ -17,7 +17,9 @@ const {
   addRentalLocation,
   deleteRentalLocation,
   userCount,
-  feedbackCount
+  feedbackCount,
+  getRentalVehicleById,
+  updateRentalVehicleById
 } = require("../controllers/adminController");
 const authMiddleware = require("../middlewares/auth-middleware");
 const adminMiddleware = require("../middlewares/admin-middleware");
@@ -66,6 +68,9 @@ router.post(
 );
 
 router.get('/rentalVehicle',authMiddleware,adminMiddleware,rentalVehicle)
+router.get('/rentalVehicle/:id',authMiddleware,adminMiddleware,getRentalVehicleById)
+router.patch('/rentalVehicle/:id/update',authMiddleware,adminMiddleware,updateRentalVehicleById)
+
 
 
 router.get('/rentalLocation',authMiddleware,adminMiddleware,rentalLocation)
@@ -73,8 +78,6 @@ router.post('/addRentalLocation',authMiddleware,adminMiddleware,addRentalLocatio
 router.delete('/rentalLocation/delete/:id',authMiddleware,adminMiddleware,deleteRentalLocation)
 
 // Counts
-
-
 router.get("/usersCount", authMiddleware, adminMiddleware, userCount);
 router.get("/feedbacksCount", authMiddleware, adminMiddleware,feedbackCount);
 

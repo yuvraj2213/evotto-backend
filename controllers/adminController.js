@@ -151,6 +151,22 @@ const rentalVehicle = async (req, res) => {
   }
 };
 
+const rentalVehicleById = async (req, res) => {
+  try {
+    const { id } = req.params; // Get the id from the request parameters
+    const response = await RentalVehicle.findById(id); // Find the vehicle by id
+
+    if (!response) {
+      return res.status(404).json({ message: "Rental Vehicle not found" });
+    }
+
+    return res.status(200).json(response); // Return the found vehicle
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Server error" }); // In case of an error
+  }
+};
+
 const rentalLocation = async (req, res) => {
   try {
     const response = await RentalLocation.find();
@@ -214,7 +230,49 @@ const feedbackCount = async (req, res) => {
   }
 };
 
+const getRentalVehicleById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const vehicle = await RentalVehicle.findOne({ _id: id });
 
+    return res.status(200).json(vehicle);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const updateRentalVehicleById = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Validate ID format
+    if (!id || id.length !== 24) {
+      return res.status(400).json({ message: "Invalid vehicle ID" });
+    }
+
+    const updatedRentalVehicleData = req.body;
+
+    console.log(updatedRentalVehicleData)
+
+    // Update the vehicle and return the updated document
+    const updatedVehicle = await RentalVehicle.findByIdAndUpdate(
+      id, // Match by ID
+      { $set: updatedRentalVehicleData }, // Update data
+      { new: true, runValidators: true } // Options to return updated document and run validation
+    );
+
+    if (!updatedVehicle) {
+      return res.status(404).json({ message: "Vehicle not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Vehicle updated successfully", updatedVehicle });
+  } catch (error) {
+    console.error("Error updating vehicle:", error);
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
 
 module.exports = {
   userDetails,
@@ -232,5 +290,7 @@ module.exports = {
   addRentalLocation,
   deleteRentalLocation,
   userCount,
-  feedbackCount
+  feedbackCount,
+  getRentalVehicleById,
+  updateRentalVehicleById,
 };
