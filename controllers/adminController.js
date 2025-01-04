@@ -125,23 +125,40 @@ const deleteSlideshow = async (req, res) => {
 
 const uploadSlideshowImage = async (req, res) => {
   try {
-    const { filename } = req.file;
+    // Ensure a file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ msg: "No file uploaded" });
+    }
 
+    // Extract filename and altText
+    const { filename } = req.file;
+    const altText = req.body.altText || "Slideshow image";
+
+    // Construct the URL for the uploaded image
+    const imageUrl = `/images/slideshow/${filename}`;
+
+    // Create a new Slideshow document
     const newImage = new Slideshow({
-      url: `/images/Slideshow/${filename}`,
-      altText: req.body.altText || "Slideshow image",
+      url: imageUrl,
+      altText,
     });
 
-    console.log(path.join(__dirname, "../../frontend/public/images/slideshow"));
-
-
+    // Save the image document in MongoDB
     await newImage.save();
-    return res
-      .status(201)
-      .json({ msg: "Image uploaded successfully", image: newImage });
+
+    // Respond with success
+    return res.status(201).json({
+      msg: "Image uploaded successfully",
+      image: newImage,
+    });
   } catch (error) {
     console.error("Error uploading image:", error);
-    return res.status(500).json({ msg: "Failed to upload image" });
+
+    // Respond with an error message
+    return res.status(500).json({
+      msg: "Failed to upload image",
+      error: error.message,
+    });
   }
 };
 
@@ -256,7 +273,7 @@ const updateRentalVehicleById = async (req, res) => {
 
     const updatedRentalVehicleData = req.body;
 
-    console.log(updatedRentalVehicleData)
+    console.log(updatedRentalVehicleData);
 
     // Update the vehicle and return the updated document
     const updatedVehicle = await RentalVehicle.findByIdAndUpdate(

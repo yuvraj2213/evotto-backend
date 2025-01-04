@@ -28,26 +28,17 @@ const adminMiddleware = require("../middlewares/admin-middleware");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Resolve the path for production
-    const uploadPath = path.resolve(
-      __dirname,
-      "../../frontend/public/images/slideshow"
-    );
-
-    // Ensure the directory exists
+    const uploadPath = path.resolve(__dirname, "uploads"); // Save temporarily in uploads
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
-
-    cb(null, uploadPath); // Use the resolved absolute path for destination
+    cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    // Generate a unique filename using the current timestamp
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
-// Configure multer with the storage engine
 const upload = multer({ storage });
 
 const router = express.Router();
