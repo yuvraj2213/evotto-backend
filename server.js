@@ -21,12 +21,17 @@ const app = express();
 // CORS Configuration
 const corsOptions = {
   origin: [
-    'https://www.evotto.in', // Allow the production domain
+    "https://www.evotto.in", // Make sure to allow the specific domain you're sending requests from
   ],
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // Allow cookies if needed
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Include OPTIONS to handle preflight requests
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"], // Allow required headers
+  credentials: true, // Allow cookies if needed for authentication
 };
+
 app.use(cors(corsOptions));
+
+// Explicitly handle OPTIONS for the upload route
+app.options("/api/admin/slideshow/upload", cors(corsOptions)); // Manually handle OPTIONS for the upload route
 
 // Middleware for parsing JSON
 app.use(express.json());
@@ -49,14 +54,13 @@ app.get("/", (req, res) => {
 // Error Handling Middleware
 app.use(errorMiddleware);
 
-// Serve Static Files (Optional)
-// Uncomment this if you want to serve static files for any frontend assets
-// app.use(express.static(path.join(__dirname, "../frontend/build")));
+// Serve Static Files (Optional, for frontend assets)
+app.use(express.static(path.join(__dirname, "../frontend/build"))); // Uncomment this if serving frontend files
 
 // Connect to the Database and Start Server
 connectDB()
   .then(() => {
-    const PORT = process.env.PORT || 5000;
+    const PORT = process.env.PORT || 2213;
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
