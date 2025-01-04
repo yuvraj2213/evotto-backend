@@ -21,7 +21,8 @@ const app = express();
 // CORS Configuration
 const corsOptions = {
   origin: [
-    "https://www.evotto.in", // Make sure to allow the specific domain you're sending requests from
+    "https://www.evotto.in", 
+    "http://localhost:5173"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Include OPTIONS to handle preflight requests
   allowedHeaders: ["Content-Type", "Authorization", "Accept"], // Allow required headers

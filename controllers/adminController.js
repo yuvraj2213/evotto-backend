@@ -122,59 +122,24 @@ const deleteSlideshow = async (req, res) => {
   }
 };
 
-
 const uploadSlideshowImage = async (req, res) => {
   try {
-    // Ensure a file was uploaded
-    if (!req.file) {
-      return res.status(400).json({ msg: "No file uploaded" });
-    }
-
-    // Extract filename and altText
     const { filename } = req.file;
-    const altText = req.body.altText?.trim() || "Slideshow image";
 
-    // Construct the URL for the uploaded image
-    const imageUrl = `/images/Slideshow/${filename}`;
-
-    // Validate the altText length (Optional: Adjust limit based on requirements)
-    if (altText.length > 255) {
-      return res.status(400).json({ msg: "Alt text is too long (max: 255 characters)" });
-    }
-
-    // Create a new Slideshow document
     const newImage = new Slideshow({
-      url: imageUrl,
-      altText,
+      url: `/images/Slideshow/${filename}`,
+      altText: req.body.altText || "Slideshow image",
     });
 
-    // Save the image document in MongoDB
     await newImage.save();
-
-    // Respond with success
-    return res.status(201).json({
-      msg: "Image uploaded successfully",
-      image: newImage,
-    });
+    return res
+      .status(201)
+      .json({ msg: "Image uploaded successfully", image: newImage });
   } catch (error) {
     console.error("Error uploading image:", error);
-
-    // Check for specific error types (e.g., database errors)
-    if (error.name === "ValidationError") {
-      return res.status(400).json({
-        msg: "Validation error while uploading image",
-        errors: error.errors,
-      });
-    }
-
-    // Generic error response
-    return res.status(500).json({
-      msg: "Failed to upload image",
-      error: error.message,
-    });
+    return res.status(500).json({ msg: "Failed to upload image" });
   }
 };
-
 
 const rentalVehicle = async (req, res) => {
   try {
