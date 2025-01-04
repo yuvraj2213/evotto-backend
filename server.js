@@ -31,11 +31,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Explicitly handle OPTIONS for the upload route
-app.options("/api/admin/slideshow/upload", cors(corsOptions)); // Manually handle OPTIONS for the upload route
 
 // Middleware for parsing JSON
 app.use(express.json());
+
+app.use(bodyParser.json());
+app.use("/uploads", express.static("uploads"));
 
 // Route Definitions
 app.use("/api/auth", authRoute);
