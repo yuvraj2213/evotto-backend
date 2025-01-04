@@ -22,7 +22,6 @@ const corsOptions = {
     'https://www.evotto.in',
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Allow cookies if needed
 };
 
 app.use(cors(corsOptions));
