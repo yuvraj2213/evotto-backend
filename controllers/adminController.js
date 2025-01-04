@@ -132,10 +132,15 @@ const uploadSlideshowImage = async (req, res) => {
 
     // Extract filename and altText
     const { filename } = req.file;
-    const altText = req.body.altText || "Slideshow image";
+    const altText = req.body.altText?.trim() || "Slideshow image";
 
     // Construct the URL for the uploaded image
     const imageUrl = `/images/Slideshow/${filename}`;
+
+    // Validate the altText length (Optional: Adjust limit based on requirements)
+    if (altText.length > 255) {
+      return res.status(400).json({ msg: "Alt text is too long (max: 255 characters)" });
+    }
 
     // Create a new Slideshow document
     const newImage = new Slideshow({
@@ -154,7 +159,15 @@ const uploadSlideshowImage = async (req, res) => {
   } catch (error) {
     console.error("Error uploading image:", error);
 
-    // Respond with an error message
+    // Check for specific error types (e.g., database errors)
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        msg: "Validation error while uploading image",
+        errors: error.errors,
+      });
+    }
+
+    // Generic error response
     return res.status(500).json({
       msg: "Failed to upload image",
       error: error.message,
