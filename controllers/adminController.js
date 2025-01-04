@@ -122,49 +122,24 @@ const deleteSlideshow = async (req, res) => {
   }
 };
 
-
-const multer = require("multer");
-const path = require("path");
-
-// Configure Multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage });
-
-// Upload Image Controller
 const uploadSlideshowImage = async (req, res) => {
-  const uploadMiddleware = upload.single("image");
+  try {
+    const { filename } = req.file;
 
-  // Execute the upload middleware
-  uploadMiddleware(req, res, (err) => {
-    if (err) {
-      return res.status(400).json({ error: "File upload failed", details: err.message });
-    }
+    const newImage = new Slideshow({
+      url: `/images/Slideshow/${filename}`,
+      altText: req.body.altText || "Slideshow image",
+    });
 
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
-    const newImage = {
-      id: Date.now().toString(),
-      url: `https://www.evotto.in/uploads/${req.file.filename}`, // Adjust the base URL as needed
-    };
-
-    // You can add this new image to a database or an in-memory array, if needed
-    // For example: images.push(newImage);
-    
-    // Respond with the uploaded image data
-    res.status(201).json({ image: newImage });
-  });
+    await newImage.save();
+    return res
+      .status(201)
+      .json({ msg: "Image uploaded successfully", image: newImage });
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    return res.status(500).json({ msg: "Failed to upload image" });
+  }
 };
-
 
 const rentalVehicle = async (req, res) => {
   try {
