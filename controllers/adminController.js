@@ -136,6 +136,9 @@ const uploadSlideshowImage = async (req, res) => {
       .status(201)
       .json({ msg: "Image uploaded successfully", image: newImage });
   } catch (error) {
+    console.log("Received file:", req.file);
+    console.log("Received fields:", req.body);
+
     console.error("Error uploading image:", error);
     return res.status(500).json({ msg: "Failed to upload image" });
   }
@@ -252,7 +255,7 @@ const updateRentalVehicleById = async (req, res) => {
 
     const updatedRentalVehicleData = req.body;
 
-    console.log(updatedRentalVehicleData)
+    console.log(updatedRentalVehicleData);
 
     // Update the vehicle and return the updated document
     const updatedVehicle = await RentalVehicle.findByIdAndUpdate(
