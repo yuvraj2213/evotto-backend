@@ -3,7 +3,6 @@ const Feedback = require("../models/feedback-model");
 const Slideshow = require("../models/slideshow-model");
 const RentalVehicle = require("../models/vehicleCards-model");
 const RentalLocation = require("../models/location-model.js");
-const path = require("path");
 
 const userDetails = async (req, res) => {
   try {
@@ -123,6 +122,7 @@ const deleteSlideshow = async (req, res) => {
   }
 };
 
+
 const uploadSlideshowImage = async (req, res) => {
   try {
     // Ensure a file was uploaded
@@ -135,7 +135,7 @@ const uploadSlideshowImage = async (req, res) => {
     const altText = req.body.altText || "Slideshow image";
 
     // Construct the URL for the uploaded image
-    const imageUrl = `/images/slideshow/${filename}`;
+    const imageUrl = `/images/Slideshow/${filename}`;
 
     // Create a new Slideshow document
     const newImage = new Slideshow({
@@ -161,6 +161,7 @@ const uploadSlideshowImage = async (req, res) => {
     });
   }
 };
+
 
 const rentalVehicle = async (req, res) => {
   try {
@@ -273,7 +274,7 @@ const updateRentalVehicleById = async (req, res) => {
 
     const updatedRentalVehicleData = req.body;
 
-    console.log(updatedRentalVehicleData);
+    console.log(updatedRentalVehicleData)
 
     // Update the vehicle and return the updated document
     const updatedVehicle = await RentalVehicle.findByIdAndUpdate(
