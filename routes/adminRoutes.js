@@ -1,5 +1,7 @@
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
+
 const multer = require("multer");
 const {
   userDetails,
@@ -19,20 +21,33 @@ const {
   userCount,
   feedbackCount,
   getRentalVehicleById,
-  updateRentalVehicleById
+  updateRentalVehicleById,
 } = require("../controllers/adminController");
 const authMiddleware = require("../middlewares/auth-middleware");
 const adminMiddleware = require("../middlewares/admin-middleware");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../../frontend/public/images/slideshow")); // Update path as needed
+    // Resolve the path for production
+    const uploadPath = path.resolve(
+      __dirname,
+      "../../frontend/public/images/slideshow"
+    );
+
+    // Ensure the directory exists
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+
+    cb(null, uploadPath); // Use the resolved absolute path for destination
   },
   filename: (req, file, cb) => {
+    // Generate a unique filename using the current timestamp
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
+// Configure multer with the storage engine
 const upload = multer({ storage });
 
 const router = express.Router();
@@ -67,19 +82,36 @@ router.post(
   uploadSlideshowImage
 );
 
-router.get('/rentalVehicle',authMiddleware,adminMiddleware,rentalVehicle)
-router.get('/rentalVehicle/:id',authMiddleware,adminMiddleware,getRentalVehicleById)
-router.patch('/rentalVehicle/:id/update',authMiddleware,adminMiddleware,updateRentalVehicleById)
+router.get("/rentalVehicle", authMiddleware, adminMiddleware, rentalVehicle);
+router.get(
+  "/rentalVehicle/:id",
+  authMiddleware,
+  adminMiddleware,
+  getRentalVehicleById
+);
+router.patch(
+  "/rentalVehicle/:id/update",
+  authMiddleware,
+  adminMiddleware,
+  updateRentalVehicleById
+);
 
-
-
-router.get('/rentalLocation',authMiddleware,adminMiddleware,rentalLocation)
-router.post('/addRentalLocation',authMiddleware,adminMiddleware,addRentalLocation)
-router.delete('/rentalLocation/delete/:id',authMiddleware,adminMiddleware,deleteRentalLocation)
+router.get("/rentalLocation", authMiddleware, adminMiddleware, rentalLocation);
+router.post(
+  "/addRentalLocation",
+  authMiddleware,
+  adminMiddleware,
+  addRentalLocation
+);
+router.delete(
+  "/rentalLocation/delete/:id",
+  authMiddleware,
+  adminMiddleware,
+  deleteRentalLocation
+);
 
 // Counts
 router.get("/usersCount", authMiddleware, adminMiddleware, userCount);
-router.get("/feedbacksCount", authMiddleware, adminMiddleware,feedbackCount);
-
+router.get("/feedbacksCount", authMiddleware, adminMiddleware, feedbackCount);
 
 module.exports = router;
