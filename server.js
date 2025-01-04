@@ -22,7 +22,7 @@ const app = express();
 const corsOptions = {
   origin: [
     "https://www.evotto.in", 
-    "http://localhost:5173"
+    // "http://localhost:5173"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Include OPTIONS to handle preflight requests
   allowedHeaders: ["Content-Type", "Authorization", "Accept"], // Allow required headers
