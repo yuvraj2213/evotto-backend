@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const path = require('path');
 
 const connectDB = require("./config/db");
 const authRoute = require("./routes/authRoutes");
@@ -28,6 +29,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
+
+app.use('/images', express.static(path.join(__dirname, '../../public/images')));
 
 // API Routes
 app.use("/api/auth", authRoute);
