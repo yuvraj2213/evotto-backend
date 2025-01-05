@@ -30,7 +30,8 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-app.use('/images', express.static(path.join(__dirname, '/tmp')));
+app.use('/images', express.static(path.join(__dirname, '../uploads')));
+
 
 
 // API Routes
