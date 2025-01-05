@@ -19,21 +19,20 @@ const {
   userCount,
   feedbackCount,
   getRentalVehicleById,
-  updateRentalVehicleById,
+  updateRentalVehicleById
 } = require("../controllers/adminController");
 const authMiddleware = require("../middlewares/auth-middleware");
 const adminMiddleware = require("../middlewares/admin-middleware");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "../uploads/Slideshow");
-    fs.mkdirSync(uploadPath, { recursive: true }); // Create the folder if it doesn't exist
-    cb(null, uploadPath);
+    cb(null, path.join("/tmp")); // Use the temporary directory in production
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
+
 
 const upload = multer({ storage });
 
@@ -69,36 +68,19 @@ router.post(
   uploadSlideshowImage
 );
 
-router.get("/rentalVehicle", authMiddleware, adminMiddleware, rentalVehicle);
-router.get(
-  "/rentalVehicle/:id",
-  authMiddleware,
-  adminMiddleware,
-  getRentalVehicleById
-);
-router.patch(
-  "/rentalVehicle/:id/update",
-  authMiddleware,
-  adminMiddleware,
-  updateRentalVehicleById
-);
+router.get('/rentalVehicle',authMiddleware,adminMiddleware,rentalVehicle)
+router.get('/rentalVehicle/:id',authMiddleware,adminMiddleware,getRentalVehicleById)
+router.patch('/rentalVehicle/:id/update',authMiddleware,adminMiddleware,updateRentalVehicleById)
 
-router.get("/rentalLocation", authMiddleware, adminMiddleware, rentalLocation);
-router.post(
-  "/addRentalLocation",
-  authMiddleware,
-  adminMiddleware,
-  addRentalLocation
-);
-router.delete(
-  "/rentalLocation/delete/:id",
-  authMiddleware,
-  adminMiddleware,
-  deleteRentalLocation
-);
+
+
+router.get('/rentalLocation',authMiddleware,adminMiddleware,rentalLocation)
+router.post('/addRentalLocation',authMiddleware,adminMiddleware,addRentalLocation)
+router.delete('/rentalLocation/delete/:id',authMiddleware,adminMiddleware,deleteRentalLocation)
 
 // Counts
 router.get("/usersCount", authMiddleware, adminMiddleware, userCount);
-router.get("/feedbacksCount", authMiddleware, adminMiddleware, feedbackCount);
+router.get("/feedbacksCount", authMiddleware, adminMiddleware,feedbackCount);
+
 
 module.exports = router;
