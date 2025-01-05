@@ -26,12 +26,13 @@ const adminMiddleware = require("../middlewares/admin-middleware");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "uploads/slideshow")); // Directory in the backend
+    cb(null, path.join("/tmp")); // Use the temporary directory in production
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
+
 
 const upload = multer({ storage });
 

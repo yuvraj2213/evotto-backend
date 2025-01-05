@@ -127,12 +127,11 @@ const uploadSlideshowImage = async (req, res) => {
     const { filename } = req.file;
 
     const newImage = new Slideshow({
-      url: `${req.protocol}://${req.get('host')}/images/slideshow/${filename}`, // Backend's URL
+      url: `/images/Slideshow/${filename}`,
       altText: req.body.altText || "Slideshow image",
     });
 
     await newImage.save();
-
     return res
       .status(201)
       .json({ msg: "Image uploaded successfully", image: newImage });
@@ -141,7 +140,6 @@ const uploadSlideshowImage = async (req, res) => {
     return res.status(500).json({ msg: "Failed to upload image" });
   }
 };
-
 
 const rentalVehicle = async (req, res) => {
   try {
