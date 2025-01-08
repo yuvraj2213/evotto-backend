@@ -10,8 +10,22 @@ const feedbackForm = async (req, res) => {
       msg: "Feedback Successfully Submitted",
     });
   } catch (e) {
-    return res.status(401).json({message:"Feedback Not Submitted"})
+    return res.status(401).json({ message: "Feedback Not Submitted" });
   }
 };
 
-module.exports = feedbackForm;
+const getFeedback = async (req, res) => {
+  try {
+    const response = await Feedback.find();
+
+    if (!response) {
+      res.status(400).send("Can't fetch the feedbacks");
+    }
+
+    res.status(200).send(response);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+module.exports = {feedbackForm,getFeedback};
