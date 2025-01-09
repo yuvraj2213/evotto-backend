@@ -44,8 +44,8 @@ const servicingFormController = async (req, res) => {
 
     // Compose confirmation email for the user
     const mailToUser = {
-      from: "yuvraj13preet@gmail.com",
-      to: userEmail, // User's email
+      from: "evotto.service@gmail.com",
+      to: userEmail, 
       subject: "Appointment Confirmation",
       html: `
         <h3>Appointment Confirmed</h3>
