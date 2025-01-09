@@ -1,7 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
-const {home,register,login,user}=require('../controllers/authController')
+const {home,register,login,user, forgotPassword}=require('../controllers/authController')
 
 const {signupSchema,loginSchema}=require('../validators/auth-validator')
 
@@ -16,6 +16,9 @@ router.get('/',home);
 router.get('/user',authMiddleware,(user))
 router.post('/register',validate(signupSchema),(register) )
 router.post('/login',validate(loginSchema),(login)) 
+
+// Forgor Password
+router.post('/forgot-password', forgotPassword);
 
 
 module.exports = router;
