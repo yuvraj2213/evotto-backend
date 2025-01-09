@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const multer = require("multer");
+const fs = require("fs");
 const {
   userDetails,
   userFeedbacks,
@@ -24,17 +25,25 @@ const {
 const authMiddleware = require("../middlewares/auth-middleware");
 const adminMiddleware = require("../middlewares/admin-middleware");
 
+
+const uploadDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// Configure Multer to save files to the "uploads" folder
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join("/tmp")); // Use the temporary directory in production
+    cb(null, uploadDir); // Save files to the "uploads" folder
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+    const uniqueName = `${Date.now()}-${file.originalname}`; // Generate unique file name
+    cb(null, uniqueName);
   },
 });
 
+const uploadImg = multer({ storage });
 
-const upload = multer({ storage });
 
 const router = express.Router();
 
@@ -53,7 +62,7 @@ router.delete(
   adminFeedbacksDelete
 );
 
-router.get("/slideshow", authMiddleware, adminMiddleware, showSlideshow);
+router.get("/slideshow", showSlideshow);
 router.delete(
   "/slideshow/delete/:id",
   authMiddleware,
@@ -62,9 +71,7 @@ router.delete(
 );
 router.post(
   "/slideshow/upload",
-  authMiddleware,
-  adminMiddleware,
-  upload.single("image"),
+  uploadImg.single("image"),
   uploadSlideshowImage
 );
 

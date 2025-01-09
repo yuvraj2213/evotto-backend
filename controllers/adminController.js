@@ -98,14 +98,21 @@ const adminFeedbacksDelete = async (req, res) => {
 
 const showSlideshow = async (req, res) => {
   try {
-    const response = await Slideshow.find();
+    const images = await Slideshow.find();
 
-    if (!response) {
-      res.status(404).json(response);
+    if (!images) {
+      res.status(404).json(images);
       return;
     }
 
-    res.status(200).json(response);
+
+
+    const imageList = images.map((image) => ({
+      url: `http://localhost:2213${image.url}`, 
+      altText: image.altText,
+    }));
+    res.status(200).json(imageList);
+
   } catch (e) {
     console.log(e);
   }
@@ -124,10 +131,9 @@ const deleteSlideshow = async (req, res) => {
 
 const uploadSlideshowImage = async (req, res) => {
   try {
-    const { filename } = req.file;
 
     const newImage = new Slideshow({
-      url: `/images/Slideshow/${filename}`,
+      url: `/uploads/${req.file.filename}`,
       altText: req.body.altText || "Slideshow image",
     });
 

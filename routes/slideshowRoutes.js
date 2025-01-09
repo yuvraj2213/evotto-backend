@@ -1,3 +1,4 @@
+const slideshow = require("../controllers/slideshowController")
 const slideshowImg = require("../controllers/slideshowController")
 
 const express=require('express')
