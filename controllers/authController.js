@@ -121,4 +121,34 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-module.exports = { home, register, login, user , forgotPassword};
+const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    // Hash the token to compare it with the stored hash
+    const resetTokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+    // Find the user with the hashed token and check if it's still valid
+    const user = await User.findOne({
+      resetPasswordToken: resetTokenHash,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Token is invalid or has expired" });
+    }
+
+    // Update the password and clear the reset token fields
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+module.exports = { home, register, login, user , forgotPassword, resetPassword};
