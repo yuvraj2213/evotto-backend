@@ -15,15 +15,15 @@ const servicingFormController = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail", // Use your email service provider
       auth: {
-        user: "yuvraj13preet@gmail.com", // Replace with your email
-        pass: "nzya honn fmiv cxdt", // Replace with your email password or app password
+        user: "evotto.service@gmail.com", // Replace with your email
+        pass: "buno sfwy jefi vzuz", // Replace with your email password or app password
       },
     });
 
     // Compose email to send to your email
     const mailToAdmin = {
       from: "your-email@gmail.com",
-      to: "yuvraj13preet@gmail.com", // Replace with your email
+      to: "evotto.service@gmail.com", // Replace with your email
       subject: "New Servicing Appointment",
       html: `
         <h3>New Servicing Appointment</h3>
