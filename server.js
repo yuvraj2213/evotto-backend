@@ -22,8 +22,8 @@ const app = express();
 
 const corsOptions = {
   origin: [
-    // "http://localhost:5173",
-    'https://www.evotto.in',
+    "http://localhost:5173",
+    // 'https://www.evotto.in',
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // Allow cookies if needed
@@ -47,74 +47,73 @@ app.use("/api/data/", rentalLocationRoute);
 
 app.use("/api/data/", servicingFormRoutes);
 
-// const uploadDir = path.join(__dirname, "uploads");
-// if (!fs.existsSync(uploadDir)) {
-//   fs.mkdirSync(uploadDir);
-// }
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
-// // Configure Multer to save files to the "uploads" folder
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, uploadDir); // Save files to the "uploads" folder
-//   },
-//   filename: (req, file, cb) => {
-//     const uniqueName = `${Date.now()}-${file.originalname}`; // Generate unique file name
-//     cb(null, uniqueName);
-//   },
-// });
+// Configure Multer to save files to the "uploads" folder
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir); // Save files to the "uploads" folder
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`; // Generate unique file name
+    cb(null, uniqueName);
+  },
+});
 
-// const upload = multer({ storage });
+const upload = multer({ storage });
 
-// // Import your Slideshow model
-// const Slideshow = require("./models/slideshow-model");
+// Import your Slideshow model
+const Slideshow = require("./models/slideshow-model");
 
-// app.post("/api/upload", upload.single("image"), async (req, res) => {
-//   try {
-//     if (!req.file) {
-//       return res.status(400).send("No file uploaded");
-//     }
+app.post("/api/upload", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).send("No file uploaded");
+    }
 
-//     // Save metadata to the Slideshow collection
-//     const newImage = new Slideshow({
-//       url: `/uploads/${req.file.filename}`, // URL for accessing the uploaded file
-//       altText: req.body.altText || "Slideshow Image", // Optional altText field
-//     });
+    // Save metadata to the Slideshow collection
+    const newImage = new Slideshow({
+      url: `/uploads/${req.file.filename}`, // URL for accessing the uploaded file
+      altText: req.body.altText || "Slideshow Image", // Optional altText field
+    });
 
-//     await newImage.save(); // Save to the database
+    await newImage.save(); // Save to the database
 
-//     res.status(200).send({
-//       message: "Image uploaded and saved to database successfully!",
-//       image: {
-//         url: newImage.url,
-//         altText: newImage.altText,
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Error uploading file or saving to database:", error);
-//     res.status(500).send("Server error");
-//   }
-// });
+    res.status(200).send({
+      message: "Image uploaded and saved to database successfully!",
+      image: {
+        url: newImage.url,
+        altText: newImage.altText,
+      },
+    });
+  } catch (error) {
+    console.error("Error uploading file or saving to database:", error);
+    res.status(500).send("Server error");
+  }
+});
 
-// Fetch all images from the database
-// app.get("/api/images", async (req, res) => {
-//   try {
-//     const images = await Slideshow.find();
-//     const imageList = images.map((image) => ({
-//       url: `http://localhost:2213${image.url}`, // Full URL to access the image
-//       altText: image.altText,
-//     }));
-//     res.status(200).json(imageList);
-//   } catch (error) {
-//     console.error("Error in /api/images:", error);
-//     res.status(500).send("Server error");
-//   }
-// });
-
+app.get("/api/images", async (req, res) => {
+  try {
+    const images = await Slideshow.find();
+    const imageList = images.map((image) => ({
+      url: `http://localhost:2213${image.url}`, // Full URL to access the image
+      altText: image.altText,
+    }));
+    res.status(200).json(imageList);
+  } catch (error) {
+    console.error("Error in /api/images:", error);
+    res.status(500).send("Server error");
+  }
+});
 
 
 
-// Serve the uploaded files statically
-// app.use("/uploads", express.static(uploadDir));
+
+
+app.use("/uploads", express.static(uploadDir));
 
 
 // Admin Routes

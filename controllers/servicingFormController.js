@@ -8,7 +8,7 @@ const servicingFormController = async (req, res) => {
     console.log("Uploaded File:", req.file);
 
     const { vehicleType, vehicleName, serviceType, requirements, date, time } = req.body;
-    const userEmail = req.body.userEmail || "user@example.com"; // Assume user email from frontend
+    const userEmail = req.body.userEmail || "user@example.com";
     const vehicleImage = req.file;
 
     // Configure Nodemailer
@@ -56,7 +56,6 @@ const servicingFormController = async (req, res) => {
       `,
     };
 
-    // Send emails
     await transporter.sendMail(mailToAdmin);
     await transporter.sendMail(mailToUser);
 
