@@ -10,6 +10,7 @@ const slideshow = async (req, res) => {
 
     const baseURL = `${req.protocol}://${req.get("host")}`;
     const imageList = images.map((image) => ({
+      id:image._id.toString(),
       url: image.url, 
       altText: image.altText,
     }));

@@ -114,6 +114,7 @@ const showSlideshow = async (req, res) => {
     // Dynamically construct base URL
     const baseURL = `${req.protocol}://${req.get("host")}`;
     const imageList = images.map((image) => ({
+      id: image._id.toString(), // Make sure the _id is included
       url: image.url, // Cloudinary URLs are already absolute
       altText: image.altText,
     }));
