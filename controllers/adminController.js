@@ -324,6 +324,53 @@ const updateRentalVehicleById = async (req, res) => {
   }
 };
 
+const addRentalVehicle = async (req, res) => {
+  try {
+    const { name, weekdayPrice, weekendPrice, isAvailable } = req.body;
+
+    // Upload the image to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "rental_vehicles" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+
+      uploadStream.end(req.file.buffer);
+    });
+
+    // Create a new vehicle document
+    const newVehicle = new RentalVehicle({
+      name,
+      weekdayPrice,
+      weekendPrice,
+      isAvailable,
+      image: result.secure_url,
+    });
+
+    // Save the vehicle to the database
+    await newVehicle.save();
+
+    res.status(201).json({ message: "Vehicle added successfully!" });
+  } catch (error) {
+    console.error("Error adding vehicle:", error);
+    res.status(500).json({ error: "Failed to add vehicle" });
+  }
+};
+
+const deleteRentalVehicleById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await RentalVehicle.deleteOne({ _id: id });
+
+    return res.status(200).json({ msg: "Location deleted successfully" });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 module.exports = {
   userDetails,
   userFeedbacks,
@@ -343,4 +390,6 @@ module.exports = {
   feedbackCount,
   getRentalVehicleById,
   updateRentalVehicleById,
+  addRentalVehicle,
+  deleteRentalVehicleById
 };
