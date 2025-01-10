@@ -3,6 +3,13 @@ const Feedback = require("../models/feedback-model");
 const Slideshow = require("../models/slideshow-model");
 const RentalVehicle = require("../models/vehicleCards-model");
 const RentalLocation = require("../models/location-model.js");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const userDetails = async (req, res) => {
   try {
@@ -100,44 +107,80 @@ const showSlideshow = async (req, res) => {
   try {
     const images = await Slideshow.find();
 
-    if (!images) {
-      res.status(404).json(images);
-      return;
+    if (!images || images.length === 0) {
+      return res.status(404).json({ msg: "No images found" });
     }
 
-
-
+    // Dynamically construct base URL
+    const baseURL = `${req.protocol}://${req.get("host")}`;
     const imageList = images.map((image) => ({
-      url: `http://localhost:2213${image.url}`, 
+      url: image.url, // Cloudinary URLs are already absolute
       altText: image.altText,
     }));
-    res.status(200).json(imageList);
 
+    res.status(200).json(imageList);
   } catch (e) {
-    console.log(e);
+    console.error("Error fetching slideshow images:", e);
+    res.status(500).json({ msg: "Failed to fetch slideshow images" });
   }
 };
 
 const deleteSlideshow = async (req, res) => {
   try {
     const id = req.params.id;
-    const response = await Slideshow.deleteOne({ _id: id });
+
+    // Find image by ID
+    const image = await Slideshow.findById(id);
+    if (!image) {
+      return res.status(404).json({ msg: "Image not found" });
+    }
+
+    // Delete image from Cloudinary
+    await cloudinary.uploader.destroy(image.publicId);
+
+    // Delete image from the database
+    await Slideshow.deleteOne({ _id: id });
 
     return res.status(200).json({ msg: "Image deleted successfully" });
   } catch (e) {
-    console.log(e);
+    console.error("Error deleting slideshow image:", e);
+    res.status(500).json({ msg: "Failed to delete image" });
   }
 };
 
 const uploadSlideshowImage = async (req, res) => {
   try {
+    const file = req.file;
 
+    if (!file) {
+      return res.status(400).json({ msg: "No file uploaded" });
+    }
+
+    // Upload file to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "slideshow" },
+        (error, result) => {
+          if (error) {
+            return reject(error);
+          }
+          resolve(result);
+        }
+      );
+
+      // Pipe the file buffer to Cloudinary
+      stream.end(file.buffer);
+    });
+
+    // Save the Cloudinary response data in your database
     const newImage = new Slideshow({
-      url: `/uploads/${req.file.filename}`,
+      url: result.secure_url,        // URL of the uploaded image
+      publicId: result.public_id,   // Unique public ID of the image
       altText: req.body.altText || "Slideshow image",
     });
 
     await newImage.save();
+
     return res
       .status(201)
       .json({ msg: "Image uploaded successfully", image: newImage });
@@ -146,6 +189,7 @@ const uploadSlideshowImage = async (req, res) => {
     return res.status(500).json({ msg: "Failed to upload image" });
   }
 };
+
 
 const rentalVehicle = async (req, res) => {
   try {
@@ -258,7 +302,7 @@ const updateRentalVehicleById = async (req, res) => {
 
     const updatedRentalVehicleData = req.body;
 
-    console.log(updatedRentalVehicleData)
+    console.log(updatedRentalVehicleData);
 
     // Update the vehicle and return the updated document
     const updatedVehicle = await RentalVehicle.findByIdAndUpdate(

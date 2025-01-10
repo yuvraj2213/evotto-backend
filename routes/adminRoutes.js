@@ -1,6 +1,4 @@
 const express = require("express");
-const path = require("path");
-const multer = require("multer");
 const fs = require("fs");
 const {
   userDetails,
@@ -25,24 +23,22 @@ const {
 const authMiddleware = require("../middlewares/auth-middleware");
 const adminMiddleware = require("../middlewares/admin-middleware");
 
+const multer = require("multer");
+const path = require("path");
 
-const uploadDir = path.join(__dirname, "../uploads");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
+const cloudinary = require('cloudinary').v2;
 
-// Configure Multer to save files to the "uploads" folder
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir); // Save files to the "uploads" folder
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = `${Date.now()}-${file.originalname}`; // Generate unique file name
-    cb(null, uniqueName);
-  },
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+
+// Use memory storage for direct upload
+const storage = multer.memoryStorage();
 const uploadImg = multer({ storage });
+
 
 
 const router = express.Router();
