@@ -174,8 +174,8 @@ const uploadSlideshowImage = async (req, res) => {
 
     // Save the Cloudinary response data in your database
     const newImage = new Slideshow({
-      url: result.secure_url,        // URL of the uploaded image
-      publicId: result.public_id,   // Unique public ID of the image
+      url: result.secure_url, // URL of the uploaded image
+      publicId: result.public_id, // Unique public ID of the image
       altText: req.body.altText || "Slideshow image",
     });
 
@@ -189,7 +189,6 @@ const uploadSlideshowImage = async (req, res) => {
     return res.status(500).json({ msg: "Failed to upload image" });
   }
 };
-
 
 const rentalVehicle = async (req, res) => {
   try {
