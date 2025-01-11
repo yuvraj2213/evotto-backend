@@ -74,7 +74,7 @@ const servicingFormController = async (req, res) => {
 
     // Compose confirmation email for the user
     const mailToUser = {
-      from: "evotto.service@gmail.com",
+      from: process.env.EMAIL,
       to: userEmail,
       subject: "Appointment Confirmation",
       html: `
@@ -90,8 +90,8 @@ const servicingFormController = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail", // Use your email service provider
       auth: {
-        user: "evotto.service@gmail.com",
-        pass: "buno sfwy jefi vzuz",
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 

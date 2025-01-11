@@ -15,6 +15,7 @@ const errorMiddleware = require("./middlewares/error-mw");
 const vehicleRoute = require("./routes/vehicleRoutes");
 const rentalLocationRoute = require("./routes/rentalLocationRoutes");
 const servicingFormRoutes = require("./routes/servicingFormRoutes");
+const driverFormRoutes = require("./routes/driverFormRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -33,8 +34,8 @@ const upload = multer({ storage });
 
 // CORS configuration
 const corsOptions = {
-  origin: "https://www.evotto.in", 
-  // origin: "http://localhost:5173", 
+  // origin: "https://www.evotto.in", 
+  origin: "http://localhost:5173", 
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
@@ -78,6 +79,7 @@ app.use("/api/data/", slideshowRoute);
 app.use("/api/data/", vehicleRoute);
 app.use("/api/data/", rentalLocationRoute);
 app.use("/api/data/", servicingFormRoutes);
+app.use("/api/data/", driverFormRoutes);
 
 // Admin Routes
 app.use("/api/admin", adminRoute);
