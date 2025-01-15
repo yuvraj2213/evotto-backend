@@ -45,7 +45,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Image Upload Endpoint
+
 app.post("/upload", upload.single("image"), async (req, res) => {
   try {
     const file = req.file;
@@ -89,10 +89,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to Evotto Backend");
 });
 
-// Error Middleware
 app.use(errorMiddleware);
 
-// Connect to Database and Start Server
 connectDB().then(() => {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {

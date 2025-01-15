@@ -66,6 +66,21 @@ userSchema.methods.comparePassword=async function(password){
     return bcrypt.compare(password,this.password)
 }
 
+
+
+userSchema.methods.generatePasswordResetToken = function () {
+  const token = jwt.sign(
+    { userId: this._id.toString() },
+    process.env.JWT_SECRET_KEY,
+    { expiresIn: "1h" } // Token valid for 1 hour
+  );
+
+  this.resetPasswordToken = token;
+  this.resetPasswordExpires = Date.now() + 60 * 60 * 1000; // 1 hour in milliseconds
+  return token;
+};
+
+
 const User = new mongoose.model("users", userSchema);
 
 module.exports = User;

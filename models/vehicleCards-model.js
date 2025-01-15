@@ -9,11 +9,15 @@ const vehicleCardSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  weekdayPrice: {
+  sixhrPrice: {
     type: String,
     require: true,
   },
-  weekendPrice: {
+  twelvehrPrice: {
+    type: String,
+    require: true,
+  },
+  twentyfourhrPrice: {
     type: String,
     require: true,
   },

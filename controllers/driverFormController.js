@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 const driverFormController = async (req, res) => {
   try {
-    const { date, time, location } = req.body;
+    const { date, time, location, duration } = req.body;
     const userEmail = req.body.userEmail || "user@example.com";
 
     const mailToAdmin = {
@@ -14,6 +14,7 @@ const driverFormController = async (req, res) => {
         <p><strong>Date:</strong> ${date}</p>
         <p><strong>Time:</strong> ${time}</p>
         <p><strong>Location:</strong> ${location}</p>
+        <p><strong>Duration:</strong> ${duration}</p>
         <p><strong>User Email:</strong> ${userEmail}</p>
       `,
     };
@@ -28,11 +29,12 @@ const driverFormController = async (req, res) => {
         <p><strong>Date:</strong> ${date}</p>
         <p><strong>Time:</strong> ${time}</p>
         <p><strong>Location:</strong> ${location}</p>
+        <p><strong>Duration:</strong> ${duration}</p>
       `,
     };
 
     const transporter = nodemailer.createTransport({
-      service: "gmail", 
+      service: "gmail",
       auth: {
         user: process.env.EMAIL,
         pass: process.env.EMAIL_PASSWORD,
@@ -52,5 +54,5 @@ const driverFormController = async (req, res) => {
 };
 
 module.exports = {
-  driverFormController
+  driverFormController,
 };
