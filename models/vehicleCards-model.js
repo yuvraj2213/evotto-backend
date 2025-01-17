@@ -21,10 +21,34 @@ const vehicleCardSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  desc: {
+    type: String,
+    require: true,
+  },
   isAvailable:{
     type:Boolean,
     require:true,
-  }
+  },
+  rating:{
+    type:String,
+    require:true,
+  },
+  reviews: [
+    {
+      user: {
+        type: String,
+        required: true,
+      },
+      comment: {
+        type: String,
+        required: true,
+      },
+      rating: {
+        type: String, 
+        required: true,
+      },
+    },
+  ],
 });
 
 const RentalVehicleCard = new mongoose.model("rentalvehicle", vehicleCardSchema);
