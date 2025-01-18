@@ -16,6 +16,7 @@ const vehicleRoute = require("./routes/vehicleRoutes");
 const rentalLocationRoute = require("./routes/rentalLocationRoutes");
 const servicingFormRoutes = require("./routes/servicingFormRoutes");
 const driverFormRoutes = require("./routes/driverFormRoutes");
+const blogRoute = require("./routes/blogRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -80,6 +81,7 @@ app.use("/api/data/", vehicleRoute);
 app.use("/api/data/", rentalLocationRoute);
 app.use("/api/data/", servicingFormRoutes);
 app.use("/api/data/", driverFormRoutes);
+app.use("/api/data/", blogRoute);
 
 // Admin Routes
 app.use("/api/admin", adminRoute);

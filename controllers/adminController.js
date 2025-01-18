@@ -3,6 +3,7 @@ const Feedback = require("../models/feedback-model");
 const Slideshow = require("../models/slideshow-model");
 const RentalVehicle = require("../models/vehicleCards-model");
 const RentalLocation = require("../models/location-model.js");
+const Blog = require("../models/blogs-model.js");
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
@@ -371,6 +372,83 @@ const deleteRentalVehicleById = async (req, res) => {
   }
 };
 
+// Blogs
+
+const addBlog = async (req, res) => {
+  try {
+    console.log("Request Body:", req.body); // Debug the parsed body
+    console.log("Uploaded File:", req.file); // Debug the file received
+
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({ message: "Title and content are required" });
+    }
+
+    let imageUrl = "";
+    if (req.file) {
+      console.log("Uploading to Cloudinary...");
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream({ resource_type: "image" }, (err, res) => {
+          if (err) reject(err);
+          else resolve(res);
+        }).end(req.file.buffer);
+      });
+      imageUrl = result.secure_url;
+      console.log("Uploaded Image URL:", imageUrl);
+    }
+
+    const blog = new Blog({ title, content, url: imageUrl });
+    await blog.save();
+
+    res.status(201).json({ message: "Blog added successfully", blog });
+  } catch (error) {
+    console.error("Error adding blog:", error); // Log error for debugging
+    res.status(500).json({ message: "Error adding blog", error: error.message });
+  }
+};
+
+
+// Update a blog
+// const updateBlog = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const { title, content } = req.body;
+
+//     const imageUrl = req.file ? req.file.path : null; // New image URL if uploaded
+
+//     const updatedFields = { title, content };
+//     if (imageUrl) updatedFields.url = imageUrl;
+
+//     const blog = await Blog.findByIdAndUpdate(id, updatedFields, { new: true });
+
+//     if (!blog) {
+//       return res.status(404).json({ message: "Blog not found" });
+//     }
+
+//     res.status(200).json({ message: "Blog updated successfully", blog });
+//   } catch (error) {
+//     res.status(500).json({ message: "Error updating blog", error });
+//   }
+// };
+
+// // Delete a blog
+// const deleteBlog = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+
+//     const blog = await Blog.findByIdAndDelete(id);
+
+//     if (!blog) {
+//       return res.status(404).json({ message: "Blog not found" });
+//     }
+
+//     res.status(200).json({ message: "Blog deleted successfully" });
+//   } catch (error) {
+//     res.status(500).json({ message: "Error deleting blog", error });
+//   }
+// };
+
 module.exports = {
   userDetails,
   userFeedbacks,
@@ -391,5 +469,7 @@ module.exports = {
   getRentalVehicleById,
   updateRentalVehicleById,
   addRentalVehicle,
-  deleteRentalVehicleById
+  deleteRentalVehicleById,
+  addBlog,
+  // deleteBlog,
 };
