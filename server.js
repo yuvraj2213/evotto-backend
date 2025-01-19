@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const bodyParser = require("body-parser");
@@ -35,8 +36,8 @@ const upload = multer({ storage });
 
 // CORS configuration
 const corsOptions = {
-  origin: "https://www.evotto.in", 
-  // origin: "http://localhost:5173", 
+  origin: "https://www.evotto.in",
+  // origin: "http://localhost:5173",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
@@ -45,7 +46,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(express.urlencoded({ extended: true })); 
 
 app.post("/upload", upload.single("image"), async (req, res) => {
   try {
@@ -85,6 +86,46 @@ app.use("/api/data/", blogRoute);
 
 // Admin Routes
 app.use("/api/admin", adminRoute);
+
+app.post("/api/send-invoice", upload.single("invoicePdf"), async (req, res) => {
+  const { toEmail, subject, text } = JSON.parse(req.body.emailDetails);
+  const invoicePdf = req.file ? req.file.buffer : null; 
+  console.log(text,subject)
+
+  if (!invoicePdf) {
+    return res.status(400).send("No file uploaded");
+  }
+
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL, // Your email
+        pass: process.env.EMAIL_PASSWORD, // Your email app password
+      },
+    });
+
+    const mailOptions = {
+      from: "your-email@gmail.com",
+      to: process.env.EMAIL,
+      subject,
+      text,
+      attachments: [
+        {
+          filename: "Invoice.pdf",
+          content: invoicePdf, // Directly use the buffer from the uploaded file
+        },
+      ],
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully");
+    res.status(200).send("Email sent successfully!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error sending email");
+  }
+});
 
 // Default Route
 app.get("/", (req, res) => {

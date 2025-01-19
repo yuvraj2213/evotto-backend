@@ -7,7 +7,7 @@ const driverFormController = async (req, res) => {
 
     const mailToAdmin = {
       from: "your-email@gmail.com",
-      to: "yuvraj13preet@gmail.com",
+      to: process.env.EMAIL,
       subject: "New Driver Booking",
       html: `
         <h3>New Driver Booking</h3>
