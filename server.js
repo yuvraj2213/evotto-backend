@@ -19,6 +19,8 @@ const servicingFormRoutes = require("./routes/servicingFormRoutes");
 const driverFormRoutes = require("./routes/driverFormRoutes");
 const blogRoute = require("./routes/blogRoutes");
 
+const documentRoute=require("./routes/documentRoutes")
+
 // Load environment variables
 dotenv.config();
 const app = express();
@@ -83,6 +85,8 @@ app.use("/api/data/", rentalLocationRoute);
 app.use("/api/data/", servicingFormRoutes);
 app.use("/api/data/", driverFormRoutes);
 app.use("/api/data/", blogRoute);
+
+app.use("/api/doc/",documentRoute)
 
 // Admin Routes
 app.use("/api/admin", adminRoute);
