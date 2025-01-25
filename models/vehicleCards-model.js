@@ -49,6 +49,10 @@ const vehicleCardSchema = new mongoose.Schema({
       },
     },
   ],
+  location: {
+    type: [String], // Array of strings
+    default: [], // Defaults to an empty array
+  },
 });
 
 const RentalVehicleCard = new mongoose.model("rentalvehicle", vehicleCardSchema);
