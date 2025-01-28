@@ -18,6 +18,7 @@ const rentalLocationRoute = require("./routes/rentalLocationRoutes");
 const servicingFormRoutes = require("./routes/servicingFormRoutes");
 const driverFormRoutes = require("./routes/driverFormRoutes");
 const blogRoute = require("./routes/blogRoutes");
+const driverRoutes = require("./routes/driverRoutes");
 
 const documentRoute=require("./routes/documentRoutes")
 
@@ -85,6 +86,7 @@ app.use("/api/data/", rentalLocationRoute);
 app.use("/api/data/", servicingFormRoutes);
 app.use("/api/data/", driverFormRoutes);
 app.use("/api/data/", blogRoute);
+app.use("/api/data/", driverRoutes);
 
 app.use("/api/doc/",documentRoute)
 
