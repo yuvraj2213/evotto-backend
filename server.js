@@ -19,6 +19,7 @@ const servicingFormRoutes = require("./routes/servicingFormRoutes");
 const driverFormRoutes = require("./routes/driverFormRoutes");
 const blogRoute = require("./routes/blogRoutes");
 const driverRoutes = require("./routes/driverRoutes");
+const driverOrderRoutes = require("./routes/driverOrderRoutes");
 
 const documentRoute=require("./routes/documentRoutes")
 
@@ -39,8 +40,8 @@ const upload = multer({ storage });
 
 // CORS configuration
 const corsOptions = {
-  origin: "https://www.evotto.in",
-  // origin: "http://localhost:5173",
+  // origin: "https://www.evotto.in",
+  origin: "http://localhost:5173",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
@@ -87,6 +88,8 @@ app.use("/api/data/", servicingFormRoutes);
 app.use("/api/data/", driverFormRoutes);
 app.use("/api/data/", blogRoute);
 app.use("/api/data/", driverRoutes);
+
+app.use("/api/data/", driverOrderRoutes);
 
 app.use("/api/doc/",documentRoute)
 
