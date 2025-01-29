@@ -40,8 +40,8 @@ const upload = multer({ storage });
 
 // CORS configuration
 const corsOptions = {
-  // origin: "https://www.evotto.in",
-  origin: "http://localhost:5173",
+  origin: "https://www.evotto.in",
+  // origin: "http://localhost:5173",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
