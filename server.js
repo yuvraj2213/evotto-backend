@@ -52,29 +52,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true })); 
 
-app.post("/upload", upload.single("image"), async (req, res) => {
-  try {
-    const file = req.file;
-
-    if (!file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
-
-    // Upload file buffer to Cloudinary
-    const result = await cloudinary.uploader.upload(
-      `data:image/jpeg;base64,${file.buffer.toString("base64")}`,
-      { folder: "uploads" }
-    );
-
-    res.json({
-      url: result.secure_url,
-      public_id: result.public_id,
-    });
-  } catch (error) {
-    console.error("Cloudinary Upload Error:", error);
-    res.status(500).json({ message: "Image upload failed" });
-  }
-});
 
 // API Routes
 app.use("/api/auth", authRoute);
@@ -109,8 +86,8 @@ app.post("/api/send-invoice", upload.single("invoicePdf"), async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: process.env.EMAIL, // Your email
-        pass: process.env.EMAIL_PASSWORD, // Your email app password
+        user: process.env.EMAIL, 
+        pass: process.env.EMAIL_PASSWORD, 
       },
     });
 
@@ -122,7 +99,7 @@ app.post("/api/send-invoice", upload.single("invoicePdf"), async (req, res) => {
       attachments: [
         {
           filename: "Invoice.pdf",
-          content: invoicePdf, // Directly use the buffer from the uploaded file
+          content: invoicePdf, 
         },
       ],
     };

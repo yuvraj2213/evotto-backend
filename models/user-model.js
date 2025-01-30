@@ -27,6 +27,17 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isDriver: {
+    type: Boolean,
+    default: false,
+  },
+  isDriverOnline: {
+    type: Boolean,
+    default: false,
+  },
+  driverOrders:{
+    type:Array,
+  },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 });
