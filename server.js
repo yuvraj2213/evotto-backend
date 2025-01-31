@@ -87,12 +87,15 @@ app.post("/api/send-invoice", upload.single("invoicePdf"), async (req, res) => {
 
   try {
     const transporter = nodemailer.createTransport({
-      service: "Gmail",
+      host: "smtp.gmail.com",
+      port: 587, // Use 465 for SSL, 587 for TLS
+      secure: false, // Set true for port 465
       auth: {
         user: process.env.EMAIL,
         pass: process.env.EMAIL_PASSWORD,
       },
     });
+    
 
     // Email to user
     const userMailOptions = {
