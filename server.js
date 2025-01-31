@@ -20,6 +20,7 @@ const driverFormRoutes = require("./routes/driverFormRoutes");
 const blogRoute = require("./routes/blogRoutes");
 const driverRoutes = require("./routes/driverRoutes");
 const driverOrderRoutes = require("./routes/driverOrderRoutes");
+const couponRoutes=require("./routes/couponRoutes")
 
 const documentRoute=require("./routes/documentRoutes")
 
@@ -67,6 +68,9 @@ app.use("/api/data/", blogRoute);
 app.use("/api/data/", driverRoutes);
 
 app.use("/api/data/", driverOrderRoutes);
+
+// Coupon Routes
+app.use("/api/data",couponRoutes);
 
 app.use("/api/doc/",documentRoute)
 
