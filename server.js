@@ -78,9 +78,8 @@ app.use("/api/doc/",documentRoute)
 app.use("/api/admin", adminRoute);
 
 app.post("/api/send-invoice", upload.single("invoicePdf"), async (req, res) => {
-  const { toEmail, subject, text } = JSON.parse(req.body.emailDetails);
-  const invoicePdf = req.file ? req.file.buffer : null; 
-  console.log(text,subject)
+  const { toEmail, subject, text, station } = JSON.parse(req.body.emailDetails);
+  const invoicePdf = req.file ? req.file.buffer : null;
 
   if (!invoicePdf) {
     return res.status(400).send("No file uploaded");
@@ -90,32 +89,53 @@ app.post("/api/send-invoice", upload.single("invoicePdf"), async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: process.env.EMAIL, 
-        pass: process.env.EMAIL_PASSWORD, 
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
-    const mailOptions = {
-      from: "your-email@gmail.com",
-      to: process.env.EMAIL,
-      subject,
-      text,
+    // Email to user
+    const userMailOptions = {
+      from: process.env.EMAIL,
+      to: toEmail,
+      subject: `Your Invoice - ${subject}`,
+      text: `Dear Customer,\n\nYour booking is confirmed with Evotto.\n\nPickUp Station: \n${station}\n\n${text}\n\nBest regards,\nEvotto`,
       attachments: [
         {
           filename: "Invoice.pdf",
-          content: invoicePdf, 
+          content: invoicePdf,
         },
       ],
     };
 
-    await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
-    res.status(200).send("Email sent successfully!");
+    // Email to yourself
+    const adminMailOptions = {
+      from: process.env.EMAIL,
+      to: process.env.EMAIL,
+      subject: `Invoice Sent - ${subject}`,
+      text: `An invoice has been sent to ${toEmail}.\n\nMessage: ${text}\n\nAttached is the same invoice.`,
+      attachments: [
+        {
+          filename: "Invoice.pdf",
+          content: invoicePdf,
+        },
+      ],
+    };
+
+    // Send both emails asynchronously
+    await Promise.all([
+      transporter.sendMail(userMailOptions),
+      transporter.sendMail(adminMailOptions),
+    ]);
+
+    console.log("Emails sent successfully to user and admin.");
+    res.status(200).send("Emails sent successfully!");
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error sending email");
+    res.status(500).send("Error sending emails");
   }
 });
+
 
 // Default Route
 app.get("/", (req, res) => {
