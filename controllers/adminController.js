@@ -328,6 +328,7 @@ const updateRentalVehicleById = async (req, res) => {
 const addRentalVehicle = async (req, res) => {
   try {
     const { name, sixhrPrice, twelvehrPrice, twentyfourhrPrice, isAvailable } = req.body;
+    console.log('ye aya',req.body)
 
     // Upload the image to Cloudinary
     const result = await new Promise((resolve, reject) => {
