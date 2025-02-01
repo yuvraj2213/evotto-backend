@@ -14,30 +14,45 @@ const home = async (req, res) => {
 
 const register = async (req, res) => {
   try {
-    const { name, email, phone, password } = req.body;
+    const { name, email, phone, password, role, companyName } = req.body;
 
-    const userExists = await User.findOne({ email: email });
+    console.log('ye aya',req.body)
 
+    // Check if user or vendor already exists by email
+    const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ message: "email already exists" });
+      return res.status(400).json({ message: "Email already exists" });
     }
 
-    const phoneExists = await User.findOne({ phone: phone });
+    // Check if phone number is already registered
+    const phoneExists = await User.findOne({ phone });
     if (phoneExists) {
       return res.status(400).json({ message: "Phone number already exists" });
     }
 
-    const userCreated = await User.create({ name, email, phone, password });
+    // Ensure role is valid (defaults to "user" if not provided)
+    const userRole = role || "user";
 
-    res.status(200).json({
+    // Validate companyName for vendors
+    if (userRole === "vendor" && !companyName) {
+      return res.status(400).json({ message: "Company name is required for vendors" });
+    }
+
+    // Create user/vendor
+    const userCreated = await User.create({ name, email, phone, password, role: userRole, companyName });
+
+    // Send response with token
+    res.status(201).json({
       msg: "Registration Successful",
       token: await userCreated.generateToken(),
       userId: userCreated._id.toString(),
+      role: userCreated.role,
     });
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    res.status(500).json({ error: e.message });
   }
 };
+
 
 const login = async (req, res) => {
   try {

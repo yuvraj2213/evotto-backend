@@ -327,7 +327,7 @@ const updateRentalVehicleById = async (req, res) => {
 
 const addRentalVehicle = async (req, res) => {
   try {
-    const { name, weekdayPrice, weekendPrice, isAvailable } = req.body;
+    const { name, sixhrPrice, twelvehrPrice, twentyfourhrPrice, isAvailable } = req.body;
 
     // Upload the image to Cloudinary
     const result = await new Promise((resolve, reject) => {
@@ -345,8 +345,9 @@ const addRentalVehicle = async (req, res) => {
     // Create a new vehicle document
     const newVehicle = new RentalVehicle({
       name,
-      weekdayPrice,
-      weekendPrice,
+      sixhrPrice,
+      twelvehrPrice,
+      twentyfourhrPrice,
       isAvailable,
       image: result.secure_url,
     });

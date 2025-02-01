@@ -21,7 +21,7 @@ const authMiddleware = require("../middlewares/auth-middleware");
 router.get("/", home);
 
 router.get("/user", authMiddleware, user);
-router.post("/register", validate(signupSchema), register);
+router.post("/register", register);
 router.post("/login", validate(loginSchema), login);
 
 // Forgor Password
