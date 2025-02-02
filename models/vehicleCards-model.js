@@ -50,8 +50,11 @@ const vehicleCardSchema = new mongoose.Schema({
     },
   ],
   location: {
-    type: [String], // Array of strings
-    default: [], // Defaults to an empty array
+    type: [String],
+    default: [], 
+  },
+  location: {
+    vendor: String, 
   },
 });
 

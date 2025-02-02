@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
 const authRoute = require("./routes/authRoutes");
 const adminRoute = require("./routes/adminRoutes");
+const vendorRoute = require("./routes/vendorRoutes");
 const feedbackRoute = require("./routes/feedbackRoutes");
 const rentalVehicleRoute = require("./routes/rentalVehicleRoutes");
 const secondHandCarRoute = require("./routes/secondHandCarRoutes");
@@ -76,6 +77,9 @@ app.use("/api/doc/",documentRoute)
 
 // Admin Routes
 app.use("/api/admin", adminRoute);
+
+// Vendor Routes
+app.use("/api/vendor", vendorRoute);
 
 app.post("/api/send-invoice", upload.single("invoicePdf"), async (req, res) => {
   const { toEmail, subject, text, station } = JSON.parse(req.body.emailDetails);
