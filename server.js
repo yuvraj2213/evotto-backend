@@ -22,6 +22,7 @@ const blogRoute = require("./routes/blogRoutes");
 const driverRoutes = require("./routes/driverRoutes");
 const driverOrderRoutes = require("./routes/driverOrderRoutes");
 const couponRoutes=require("./routes/couponRoutes")
+const orderRoute=require("./routes/orderRoutes")
 
 const documentRoute=require("./routes/documentRoutes")
 
@@ -80,6 +81,9 @@ app.use("/api/admin", adminRoute);
 
 // Vendor Routes
 app.use("/api/vendor", vendorRoute);
+
+// Order Routes
+app.use("/api/orders",orderRoute);
 
 app.post("/api/send-invoice", upload.single("invoicePdf"), async (req, res) => {
   const { toEmail, subject, text, station } = JSON.parse(req.body.emailDetails);
