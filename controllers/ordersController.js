@@ -15,13 +15,15 @@ const getVendorOrders = async (req, res) => {
     const orders = await Order.find({vendorId});
     res.status(200).json(orders);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching blogs", error });
+    res.status(500).json({ message: "Error fetching orders", error });
   }
 };
 
 const addOrder = async (req, res) => {
   try {
-    const { type, userName, userId, vehicle, vendor, vendorId, amount } = req.body;
+    const { type, userName, userId, vehicle, vendor, vendorId, amount, userDocument } = req.body;
+
+    console.log('ye aya',userDocument)
 
     if (!vendorId || !amount) {
       return res.status(400).json({ error: "All fields are required" });
@@ -35,6 +37,7 @@ const addOrder = async (req, res) => {
       vendor,
       vendorId,
       amount,
+      userDocument,
       isCompleted: false,
       isCancelled: false,
     });
