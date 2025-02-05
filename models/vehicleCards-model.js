@@ -55,7 +55,7 @@ const vehicleCardSchema = new mongoose.Schema({
   },
   location: {
     vendor: String, 
-  },
+  }
 });
 
 const RentalVehicleCard = new mongoose.model("rentalvehicle", vehicleCardSchema);
