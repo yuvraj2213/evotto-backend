@@ -3,6 +3,7 @@ const Feedback = require("../models/feedback-model");
 const Slideshow = require("../models/slideshow-model");
 const RentalVehicle = require("../models/vehicleCards-model");
 const RentalLocation = require("../models/location-model.js");
+const PendingVehicles=require('../models/rental-vehicle-pending-model.js')
 const Blog = require("../models/blogs-model.js");
 const cloudinary = require("cloudinary").v2;
 
@@ -450,6 +451,52 @@ const addBlog = async (req, res) => {
 //   }
 // };
 
+const pendingVehicles = async (req, res) => {
+  try {
+    const response = await PendingVehicles.find();
+
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const acceptPendingVehicle = async (req, res) => {
+  try {
+    const { name,image, description, sixhrPrice, twelvehrPrice, twentyfourhrPrice, isAvailable } = req.body;
+
+    console.log(image)
+    // Create a new vehicle document
+    const newVehicle = new RentalVehicle({
+      name,
+      image,
+      sixhrPrice,
+      twelvehrPrice,
+      twentyfourhrPrice,
+      desc:description,
+      isAvailable,
+    });
+    
+    await newVehicle.save();
+
+    res.status(201).json({ message: "Vehicle added successfully!" });
+  } catch (error) {
+    console.error("Error adding vehicle:", error);
+    res.status(500).json({ error: "Failed to add vehicle" });
+  }
+};
+
+const deletePendingVehicle=async(req,res)=>{
+  try {
+    const { id } = req.params;
+    await PendingVehicles.findByIdAndDelete(id);
+    res.status(200).json({ message: "Vehicle removed from pending list." });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete pending vehicle." });
+  }
+}
+
+
 module.exports = {
   userDetails,
   userFeedbacks,
@@ -473,4 +520,7 @@ module.exports = {
   deleteRentalVehicleById,
   addBlog,
   // deleteBlog,
+  pendingVehicles,
+  acceptPendingVehicle,
+  deletePendingVehicle
 };

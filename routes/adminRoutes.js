@@ -22,6 +22,9 @@ const {
   addRentalVehicle,
   deleteRentalVehicleById,
   addBlog,
+  pendingVehicles,
+  acceptPendingVehicle,
+  deletePendingVehicle,
   // getAllBlogs,
   // updateBlog,
   // deleteBlog,
@@ -125,5 +128,11 @@ router.post(
 );
 // router.put("/update/:id", uploadImg.single("image"), updateBlog);
 // router.delete("/delete/:id", deleteBlog);
+
+router.get('/pendingVehicles',authMiddleware,adminMiddleware,pendingVehicles);
+
+router.post('/acceptPendingVehicle',authMiddleware,adminMiddleware,acceptPendingVehicle);
+router.delete('/deletePendingVehicle/:id',authMiddleware,adminMiddleware,deletePendingVehicle);
+
 
 module.exports = router;
