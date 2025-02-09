@@ -1,24 +1,15 @@
 const mongoose = require("mongoose");
 
 const secondHandCarsSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    require: true,
-  },
-  image: {
-    type: String,
-    require: true,
-  },
-  price: {
-    type: String,
-    require: true,
-  },
-  weekendPrice: {
-    type: String,
-    require: true,
-  },
-});
+  name: { type: String, required: true },
+  address: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  whatsappNumber: { type: String },
+  carName: { type: String, required: true },
+  condition: { type: String, required: true },
+  conditionDesc: { type: String, required: true },
+  carPhotos: [{ type: String }],  
+  sellingPrice: { type: Number, required: true },
+}, { timestamps: true });
 
-const SecondHandCar = new mongoose.model("secondhandcar", secondHandCarsSchema);
-
-module.exports = SecondHandCar;
+module.exports = mongoose.model("SecondHandCarOrder", secondHandCarsSchema);

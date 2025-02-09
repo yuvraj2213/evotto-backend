@@ -16,8 +16,6 @@ const register = async (req, res) => {
   try {
     const { name, email, phone, password, role, companyName } = req.body;
 
-    console.log('ye aya',req.body)
-
     // Check if user or vendor already exists by email
     const userExists = await User.findOne({ email });
     if (userExists) {

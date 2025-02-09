@@ -46,6 +46,7 @@ const upload = multer({ storage });
 const corsOptions = {
   origin: "https://www.evotto.in",
   // origin: "http://localhost:5173",
+  // origin: "http://localhost:5174",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
@@ -61,7 +62,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoute);
 app.use("/api/form/", feedbackRoute);
 app.use("/api/data/", rentalVehicleRoute);
-app.use("/api/data/", secondHandCarRoute);
 app.use("/api/data/", slideshowRoute);
 app.use("/api/data/", vehicleRoute);
 app.use("/api/data/", rentalLocationRoute);
@@ -88,6 +88,9 @@ app.use("/api/orders",orderRoute);
 
 // Quiz Route
 app.use("/api/quiz",quizRoute);
+
+app.use("/api/cars/", secondHandCarRoute);
+
 
 
 app.post("/api/send-invoice", upload.single("invoicePdf"), async (req, res) => {
