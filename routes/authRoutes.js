@@ -8,6 +8,8 @@ const {
   user,
   forgotPassword,
   resetPassword,
+  sendOTP,
+  verifyOTP,
 } = require("../controllers/authController");
 
 const { signupSchema, loginSchema } = require("../validators/auth-validator");
@@ -24,13 +26,9 @@ router.get("/user", authMiddleware, user);
 router.post("/register", register);
 router.post("/login", validate(loginSchema), login);
 
-// Forgor Password
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password/:token", resetPassword);
+// Login with OTP feature
+router.post("/send-otp", sendOTP);
+router.post("/verify-otp", verifyOTP);
 
-router.get("/reset-password/:token", (req, res) => {
-  const { token } = req.params;
-  res.redirect(`http://localhost:5173/reset-password/${token}`);
-});
 
 module.exports = router;
