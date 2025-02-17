@@ -96,7 +96,6 @@ const user = async (req, res) => {
 
 const otpStorage = new Map();
 
-// Generate and send OTP
 const sendOTP = async (req, res) => {
   try {
     const { email } = req.body;
@@ -109,7 +108,7 @@ const sendOTP = async (req, res) => {
 
     // Generate a 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresIn = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+    const expiresIn = Date.now() + 10 * 60 * 1000; 
 
     // Store OTP temporarily
     otpStorage.set(email, { otp, expiresIn });
@@ -123,7 +122,7 @@ const sendOTP = async (req, res) => {
 
     await sendEmail({
       to: user.email,
-      subject: "Your OTP Code",
+      subject: "Evotto Login OTP Code",
       html: emailContent,
     });
 

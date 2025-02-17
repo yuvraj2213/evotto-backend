@@ -1,5 +1,5 @@
 const express = require("express");
-const {getAllVehicles, totalRevenue, updateVehicleAvailability} = require('../controllers/vendorController');
+const {getAllVehicles, totalRevenue, updateVehicleAvailability, updateRentalVehicleById} = require('../controllers/vendorController');
 const { addRentalVehicle } = require("../controllers/vendorController");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
@@ -23,5 +23,10 @@ router.patch("/updateVehicle/:vehicleId", updateVehicleAvailability);
 router.get('/totalRevenue/:vendorId',totalRevenue)
 
 router.post('/addRentalVehicle',uploadImg.single("image"),addRentalVehicle)
+
+router.patch(
+  "/rentalVehicle/:id/update",
+  updateRentalVehicleById
+);
 
 module.exports=router;

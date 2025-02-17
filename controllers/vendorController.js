@@ -159,9 +159,43 @@ const addRentalVehicle = async (req, res) => {
   }
 };
 
+const updateRentalVehicleById = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Validate ID format
+    if (!id || id.length !== 24) {
+      return res.status(400).json({ message: "Invalid vehicle ID" });
+    }
+
+    const updatedRentalVehicleData = req.body;
+
+    console.log(updatedRentalVehicleData);
+
+    // Update the vehicle and return the updated document
+    const updatedVehicle = await Vehicle.findByIdAndUpdate(
+      id, // Match by ID
+      { $set: updatedRentalVehicleData }, // Update data
+      { new: true, runValidators: true } // Options to return updated document and run validation
+    );
+
+    if (!updatedVehicle) {
+      return res.status(404).json({ message: "Vehicle not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Vehicle updated successfully", updatedVehicle });
+  } catch (error) {
+    console.error("Error updating vehicle:", error);
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
 module.exports = {
   getAllVehicles,
   updateVehicleAvailability,
   totalRevenue,
   addRentalVehicle,
+  updateRentalVehicleById
 };

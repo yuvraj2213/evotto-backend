@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
 const authRoute = require("./routes/authRoutes");
 const adminRoute = require("./routes/adminRoutes");
+const userRoute = require("./routes/userRoute");
 const vendorRoute = require("./routes/vendorRoutes");
 const feedbackRoute = require("./routes/feedbackRoutes");
 const rentalVehicleRoute = require("./routes/rentalVehicleRoutes");
@@ -60,6 +61,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // API Routes
 app.use("/api/auth", authRoute);
+app.use("/api/users",userRoute);
 app.use("/api/form/", feedbackRoute);
 app.use("/api/data/", rentalVehicleRoute);
 app.use("/api/data/", slideshowRoute);
