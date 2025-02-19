@@ -309,8 +309,8 @@ const updateRentalVehicleById = async (req, res) => {
     // Update the vehicle and return the updated document
     const updatedVehicle = await RentalVehicle.findByIdAndUpdate(
       id, // Match by ID
-      { $set: updatedRentalVehicleData }, // Update data
-      { new: true, runValidators: true } // Options to return updated document and run validation
+      { $set: updatedRentalVehicleData }, 
+      { new: true, runValidators: true } 
     );
 
     if (!updatedVehicle) {
@@ -328,7 +328,7 @@ const updateRentalVehicleById = async (req, res) => {
 
 const addRentalVehicle = async (req, res) => {
   try {
-    const { name, sixhrPrice, twelvehrPrice, twentyfourhrPrice, isAvailable } = req.body;
+    const { name, sixhrPrice, twelvehrPrice, twentyfourhrPrice,perMinPrice, vehicleType, isAvailable } = req.body;
 
     // Upload the image to Cloudinary
     const result = await new Promise((resolve, reject) => {
@@ -349,11 +349,12 @@ const addRentalVehicle = async (req, res) => {
       sixhrPrice,
       twelvehrPrice,
       twentyfourhrPrice,
+      perMinPrice,
+      vehicleType,
       isAvailable,
       image: result.secure_url,
     });
 
-    // Save the vehicle to the database
     await newVehicle.save();
 
     res.status(201).json({ message: "Vehicle added successfully!" });

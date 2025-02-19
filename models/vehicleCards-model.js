@@ -7,19 +7,21 @@ const vehicleCardSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    require: true,
+    // require: true,
   },
   sixhrPrice: {
     type: String,
-    require: true,
+    // require: true,
   },
   twelvehrPrice: {
     type: String,
-    require: true,
+    // require: true,
   },
   twentyfourhrPrice: {
     type: String,
-    require: true,
+  },
+  perMinPrice: {
+    type: String,
   },
   desc: {
     type: String,
@@ -31,21 +33,21 @@ const vehicleCardSchema = new mongoose.Schema({
   },
   rating:{
     type:String,
-    require:true,
+    // require:true,
   },
   reviews: [
     {
       user: {
         type: String,
-        required: true,
+        // required: true,
       },
       comment: {
         type: String,
-        required: true,
+        // required: true,
       },
       rating: {
         type: String, 
-        required: true,
+        // required: true,
       },
     },
   ],
@@ -55,6 +57,9 @@ const vehicleCardSchema = new mongoose.Schema({
   },
   location: {
     vendor: String, 
+  },
+  vehicleType: {
+    type: String, 
   }
 });
 
