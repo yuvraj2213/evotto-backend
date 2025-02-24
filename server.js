@@ -16,6 +16,7 @@ const secondHandCarRoute = require("./routes/secondHandCarRoutes");
 const slideshowRoute = require("./routes/slideshowRoutes");
 const errorMiddleware = require("./middlewares/error-mw");
 const vehicleRoute = require("./routes/vehicleRoutes");
+const servicingRoute = require("./routes/servicingRoutes");
 const rentalLocationRoute = require("./routes/rentalLocationRoutes");
 const servicingFormRoutes = require("./routes/servicingFormRoutes");
 const driverFormRoutes = require("./routes/driverFormRoutes");
@@ -45,8 +46,8 @@ const upload = multer({ storage });
 
 // CORS configuration
 const corsOptions = {
-  origin: "https://www.evotto.in",
-  // origin: "http://localhost:5173",
+  // origin: "https://www.evotto.in",
+  origin: "http://localhost:5173",
   // origin: "http://localhost:5175",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
@@ -64,6 +65,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/users",userRoute);
 app.use("/api/form/", feedbackRoute);
 app.use("/api/data/", rentalVehicleRoute);
+app.use("/api/servicing/", servicingRoute);
 app.use("/api/data/", slideshowRoute);
 app.use("/api/data/", vehicleRoute);
 app.use("/api/data/", rentalLocationRoute);

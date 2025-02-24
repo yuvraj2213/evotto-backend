@@ -2,21 +2,18 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const nodemailer = require("nodemailer");
 
-// Configure Multer to use memoryStorage
 const storage = multer.memoryStorage();
 const uploadImg = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5 MB
+  limits: { fileSize: 5 * 1024 * 1024 }, 
 });
 
-// Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Function to upload image to Cloudinary
 const uploadImageToCloudinary = async (file) => {
   try {
     const result = await cloudinary.uploader.upload_stream(
