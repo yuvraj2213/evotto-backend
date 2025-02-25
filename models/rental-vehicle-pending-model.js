@@ -22,6 +22,14 @@ const pendingVehicleSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    vendor: {
+      type: String,
+      required: true,
+    },
+    vendorId: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

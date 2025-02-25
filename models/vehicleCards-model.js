@@ -27,12 +27,12 @@ const vehicleCardSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  isAvailable:{
-    type:Boolean,
-    require:true,
+  isAvailable: {
+    type: Boolean,
+    require: true,
   },
-  rating:{
-    type:String,
+  rating: {
+    type: String,
     // require:true,
   },
   reviews: [
@@ -46,23 +46,32 @@ const vehicleCardSchema = new mongoose.Schema({
         // required: true,
       },
       rating: {
-        type: String, 
+        type: String,
         // required: true,
       },
     },
   ],
   location: {
     type: [String],
-    default: [], 
+    default: [],
   },
   location: {
-    vendor: String, 
+    vendor: String,
+  },
+  vendor: {
+    type: String,
+  },
+  vendorId: {
+    type: String,
   },
   vehicleType: {
-    type: String, 
-  }
+    type: String,
+  },
 });
 
-const RentalVehicleCard = new mongoose.model("rentalvehicle", vehicleCardSchema);
+const RentalVehicleCard = new mongoose.model(
+  "rentalvehicle",
+  vehicleCardSchema
+);
 
 module.exports = RentalVehicleCard;

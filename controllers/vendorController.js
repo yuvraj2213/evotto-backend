@@ -126,9 +126,8 @@ const totalRevenue = async (req, res) => {
 
 const addRentalVehicle = async (req, res) => {
   try {
-    const { name, description, vehicleNumber, kmRunning } = req.body;
+    const { name, description, vehicleNumber, kmRunning, vendor, vendorId } = req.body;
 
-    // Upload the image to Cloudinary
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         { folder: "rental_vehicles" },
@@ -148,6 +147,8 @@ const addRentalVehicle = async (req, res) => {
       vehicleNumber,
       kmRunning,
       image: result.secure_url,
+      vendor,
+      vendorId
     });
 
     await newVehicle.save();

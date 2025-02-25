@@ -3,7 +3,7 @@ const Feedback = require("../models/feedback-model");
 const Slideshow = require("../models/slideshow-model");
 const RentalVehicle = require("../models/vehicleCards-model");
 const RentalLocation = require("../models/location-model.js");
-const PendingVehicles=require('../models/rental-vehicle-pending-model.js')
+const PendingVehicles = require("../models/rental-vehicle-pending-model.js");
 const Blog = require("../models/blogs-model.js");
 const cloudinary = require("cloudinary").v2;
 
@@ -309,8 +309,8 @@ const updateRentalVehicleById = async (req, res) => {
     // Update the vehicle and return the updated document
     const updatedVehicle = await RentalVehicle.findByIdAndUpdate(
       id, // Match by ID
-      { $set: updatedRentalVehicleData }, 
-      { new: true, runValidators: true } 
+      { $set: updatedRentalVehicleData },
+      { new: true, runValidators: true }
     );
 
     if (!updatedVehicle) {
@@ -328,7 +328,15 @@ const updateRentalVehicleById = async (req, res) => {
 
 const addRentalVehicle = async (req, res) => {
   try {
-    const { name, sixhrPrice, twelvehrPrice, twentyfourhrPrice,perMinPrice, vehicleType, isAvailable } = req.body;
+    const {
+      name,
+      sixhrPrice,
+      twelvehrPrice,
+      twentyfourhrPrice,
+      perMinPrice,
+      vehicleType,
+      isAvailable,
+    } = req.body;
 
     // Upload the image to Cloudinary
     const result = await new Promise((resolve, reject) => {
@@ -385,17 +393,21 @@ const addBlog = async (req, res) => {
     const { title, content } = req.body;
 
     if (!title || !content) {
-      return res.status(400).json({ message: "Title and content are required" });
+      return res
+        .status(400)
+        .json({ message: "Title and content are required" });
     }
 
     let imageUrl = "";
     if (req.file) {
       console.log("Uploading to Cloudinary...");
       const result = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream({ resource_type: "image" }, (err, res) => {
-          if (err) reject(err);
-          else resolve(res);
-        }).end(req.file.buffer);
+        cloudinary.uploader
+          .upload_stream({ resource_type: "image" }, (err, res) => {
+            if (err) reject(err);
+            else resolve(res);
+          })
+          .end(req.file.buffer);
       });
       imageUrl = result.secure_url;
       console.log("Uploaded Image URL:", imageUrl);
@@ -407,10 +419,11 @@ const addBlog = async (req, res) => {
     res.status(201).json({ message: "Blog added successfully", blog });
   } catch (error) {
     console.error("Error adding blog:", error); // Log error for debugging
-    res.status(500).json({ message: "Error adding blog", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error adding blog", error: error.message });
   }
 };
-
 
 // Update a blog
 // const updateBlog = async (req, res) => {
@@ -464,20 +477,30 @@ const pendingVehicles = async (req, res) => {
 
 const acceptPendingVehicle = async (req, res) => {
   try {
-    const { name,image, description, sixhrPrice, twelvehrPrice, twentyfourhrPrice, isAvailable } = req.body;
+    const {
+      name,
+      image,
+      description,
+      sixhrPrice,
+      twelvehrPrice,
+      twentyfourhrPrice,
+      isAvailable,
+      vendor,
+      vendorId,
+    } = req.body;
 
-    console.log(image)
-    // Create a new vehicle document
     const newVehicle = new RentalVehicle({
       name,
       image,
       sixhrPrice,
       twelvehrPrice,
       twentyfourhrPrice,
-      desc:description,
+      desc: description,
       isAvailable,
+      vendor,
+      vendorId,
     });
-    
+
     await newVehicle.save();
 
     res.status(201).json({ message: "Vehicle added successfully!" });
@@ -487,7 +510,7 @@ const acceptPendingVehicle = async (req, res) => {
   }
 };
 
-const deletePendingVehicle=async(req,res)=>{
+const deletePendingVehicle = async (req, res) => {
   try {
     const { id } = req.params;
     await PendingVehicles.findByIdAndDelete(id);
@@ -495,8 +518,7 @@ const deletePendingVehicle=async(req,res)=>{
   } catch (error) {
     res.status(500).json({ error: "Failed to delete pending vehicle." });
   }
-}
-
+};
 
 module.exports = {
   userDetails,
@@ -523,5 +545,5 @@ module.exports = {
   // deleteBlog,
   pendingVehicles,
   acceptPendingVehicle,
-  deletePendingVehicle
+  deletePendingVehicle,
 };
