@@ -31,7 +31,7 @@ const documentRoute=require("./routes/documentRoutes")
 
 // Load environment variables
 dotenv.config();
-const app = express();
+// const app = express();
 
 // Cloudinary Configuration
 cloudinary.config({
